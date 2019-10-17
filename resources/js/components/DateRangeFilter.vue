@@ -2,7 +2,7 @@
   <div>
     <h3 class="text-sm uppercase tracking-wide text-80 bg-30 p-3">{{ filter.name }}</h3>
 
-    <div class="p-2">
+    <div class="p-2" >
   <input
     class="w-full form-control form-input form-input-bordered"
     :disabled="disabled"
@@ -18,6 +18,7 @@
 <script>
 import flatpickr from 'flatpickr'
 import '../../airbnb-modified.css'
+import { Armenian } from "../locales/hy.js"
 
 export default {
   props: {
@@ -71,28 +72,38 @@ export default {
 
     enableSeconds() {
       return this.filter.enableSeconds
-    }
+    },
+    
+    locale() {
+      //overwriting `rangeSeparator` for keeping range after closing filter
+      if (this.filter.locale === 'hy') {
+        Armenian.rangeSeparator = ` ${this.separator} `;
+
+        return Armenian;
+      } else {
+        return {rangeSeparator: ` ${this.separator} `};
+      }
+    },
   },
 
   mounted() {
     const self = this
     this.$nextTick(() => {
-      this.flatpickr = flatpickr(this.$refs.datePicker, {
+       this.flatpickr = flatpickr(this.$refs.datePicker, {
         enableTime: this.enableTime,
         enableSeconds: this.enableSeconds,
         onClose: this.handleChange,
         dateFormat: this.dateFormat,
+        inline: true,
         allowInput: true,
-        // static: true,
         mode: 'range',
         time_24hr: !this.twelveHourTime,
         onReady() {
           self.$refs.datePicker.parentNode.classList.add('date-filter')
         },
-          locale: {
-              rangeSeparator: ` ${this.separator} `
-          }
+        locale: this.locale,
       })
+
       const wrapper = document.querySelector('.dropdown-menu div')
       wrapper.classList.remove('overflow-hidden')
     })

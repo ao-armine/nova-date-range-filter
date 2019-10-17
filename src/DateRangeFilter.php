@@ -14,7 +14,6 @@ abstract class DateRangeFilter extends Filter
         $this->dateFormat('Y-m-d');
     }
 
-
     /**
      * Get the filter's available options.
      *
@@ -34,5 +33,10 @@ abstract class DateRangeFilter extends Filter
     public function placeholder($placeholder)
     {
         return $this->withMeta(['placeholder' => $placeholder]);
+    }
+
+    public function locale($locale)
+    {
+        return $this->withMeta(['locale' => $locale]);
     }
 }
